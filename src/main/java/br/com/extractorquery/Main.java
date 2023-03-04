@@ -1,6 +1,5 @@
 package br.com.extractorquery;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -18,11 +17,19 @@ public class Main {
 
      */
 
-    String pathNameInput = "C:\\DEV\\RollbackSql\\pasta1\\script.sql";
-    String pathNameOutput = "C:\\DEV\\RollbackSql\\pasta2\\script_rollback.sql";
+    String pathNameInput = "/automation/merge/input/script.sql";
+    String pathNameOutput = "/automation/merge/output/script_rollback.sql";
 
     ReadFile readFile = new ReadFile(pathNameInput);
     List<String> content = readFile.getContent();
+    try {
+      System.out.println("Carregando arquivo em memoria...");
+      Thread.sleep(2000);
+
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+
     List<DataModel> list = readFile.extractQueryInsert(content);
 
     WriteFile writeFile = new WriteFile(pathNameOutput);

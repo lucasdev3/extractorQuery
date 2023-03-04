@@ -12,10 +12,7 @@ import java.util.regex.Pattern;
 
 public class ReadFile {
 
-  private String pathName;
-
-  public ReadFile() {
-  }
+  private final String pathName;
 
   public ReadFile(String pathName) {
     this.pathName = pathName;
@@ -66,7 +63,6 @@ public class ReadFile {
       } else {
         System.out.println("NO MATCH");
         System.out.println("Query inválida. Linha: " + line);
-
       }
       line++;
     }
