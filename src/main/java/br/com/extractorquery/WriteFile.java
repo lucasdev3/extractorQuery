@@ -24,7 +24,7 @@ public class WriteFile {
 
   public void generateFileRollbackOfInsert(List<DataModel> listQueryInsert) {
     List<String> content = new ArrayList<>();
-    List<String> reservedKeysSql = Arrays.asList("PROCEDURE", "FUNCTION", "DECLARE");
+    List<String> reservedKeysSql = Arrays.asList("PROCEDURE", "FUNCTION", "DECLARE", "TO_DATE");
     System.out.println("Carregando arquivo de entrada...");
     for (DataModel dataModel : listQueryInsert) {
       // LINHA DO ARQUIVO
@@ -35,15 +35,11 @@ public class WriteFile {
         boolean isNumber = currentValue.matches("\\d+");
         boolean isLastArgumenth = i == dataModel.getColumns().size() - 1;
         if (i == 0) {
-          query.append(currentColumn).append(isNumber ? " = " : " = '")
-              .append(currentValue).append(
-                  isNumber && !reservedKeysSql.contains(currentValue.toUpperCase().trim()) ? ""
-                      : "', ");
+          query.append(currentColumn).append(" = ")
+              .append(currentValue).append(isLastArgumenth ? "" : ", ");
         } else {
-          query.append(" AND ").append(currentColumn).append(isNumber ? " = " : " = '")
-              .append(currentValue).append(isLastArgumenth ? (
-                  (isNumber && !reservedKeysSql.contains(currentValue.toUpperCase().trim())) ? "" : "'")
-                  : "', ");
+          query.append(" AND ").append(currentColumn).append(" = ")
+              .append(currentValue).append(isLastArgumenth ? "" : ", ");
         }
       }
       query.append(";");

@@ -41,14 +41,15 @@ public class ReadFile {
     int line = 1;
     for (String linha : list) {
       System.out.println("Analisando linha " + line + " ...");
-      String pattern = "\\bINSERT\\s+INTO\\s+(\\S+)\\s*\\(([^)]+)\\)\\s*VALUES\\s*\\(([^)]+)\\)";
-      Pattern regex = Pattern.compile(pattern);
+//      linha.replace("")
+      String pattern = "\\bINSERT\\s+INTO\\s+(\\S+)\\s*\\(([^)]+)\\)\\s*VALUES\\s*\\(([^)]+\\)?)\\)";
+      Pattern regex = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
       Matcher matcher = regex.matcher(linha);
       if (matcher.find()) {
         String queryInsert = matcher.group(0);
         String tableName = matcher.group(1);
-        List<String> columns = Arrays.asList(matcher.group(2).split(", "));
-        List<String> values = Arrays.asList(matcher.group(3).replaceAll("'", "").split(", "));
+        List<String> columns = Arrays.asList(matcher.group(2).replaceAll(" ", "").split(","));
+        List<String> values = Arrays.asList(matcher.group(3).replaceAll(" ", "").split(","));
         if (columns.size() != values.size()) {
           System.out.println("NO MATCH");
           System.out.println("Query inválidada por inconsistência. Linha: " + line);
