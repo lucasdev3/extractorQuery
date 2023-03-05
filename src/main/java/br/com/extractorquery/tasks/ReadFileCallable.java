@@ -6,14 +6,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.xml.crypto.Data;
 
 public class ReadFileCallable implements Callable<List<DataModel>> {
 
@@ -60,7 +58,7 @@ public class ReadFileCallable implements Callable<List<DataModel>> {
     // EXTRAINDO DADOS E PROCESSANDO RETORNO
     int line = 1;
     for (String linha : contentFile) {
-      System.out.println("Analisando linha " + line + " ...");
+      System.out.println(threadName + " - Analisando arquivo " + this.fileName + " linha " + line + " ...");
 //      linha.replace("")
       String pattern = "\\bINSERT\\s+INTO\\s+(\\S+)\\s*\\(([^)]+)\\)\\s*VALUES\\s*\\(([^)]+\\)?)\\)";
       Pattern regex = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
@@ -76,12 +74,13 @@ public class ReadFileCallable implements Callable<List<DataModel>> {
           System.out.println("Query insert: " + queryInsert);
           System.out.println("\n");
         } else {
-          System.out.println("Query insert: " + queryInsert);
-          System.out.println("Table Name: " + tableName);
-          System.out.println("Columns insert: " + columns);
-          System.out.println("Values insert: " + values);
-          System.out.println("\n");
-          listDataModel.add(new DataModel(queryInsert, tableName, columns, values));
+//          System.out.println("Query insert: " + queryInsert);
+//          System.out.println("Table Name: " + tableName);
+//          System.out.println("Columns insert: " + columns);
+//          System.out.println("Values insert: " + values);
+//          System.out.println("\n");
+          listDataModel.add(
+              new DataModel(queryInsert, tableName, columns, values, this.fileName, this.pathName));
         }
       } else {
         System.out.println("NO MATCH");

@@ -9,12 +9,18 @@ public class DataModel {
   private List<String> columns;
   private List<String> values;
 
+  private String fileName;
+
+  private String path;
+
   public DataModel(String query, String tableName, List<String> columns,
-      List<String> values) {
+      List<String> values, String fileName, String path) {
     this.query = query;
     this.tableName = tableName;
     this.columns = columns;
     this.values = values;
+    this.fileName = fileName;
+    this.path = path;
   }
 
   public String getQuery() {
@@ -47,5 +53,21 @@ public class DataModel {
 
   public void setValues(List<String> values) {
     this.values = values;
+  }
+
+  public String getFileName() {
+    return fileName;
+  }
+
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
   }
 }

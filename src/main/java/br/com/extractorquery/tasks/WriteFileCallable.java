@@ -10,12 +10,13 @@ import java.util.concurrent.Callable;
 
 public class WriteFileCallable implements Callable<String> {
 
-  private final String pathName;
+  private String pathName;
+
+  private String fileName;
 
   private List<DataModel> dataModels;
 
-  public WriteFileCallable(String pathName, List<DataModel> dataModels) {
-    this.pathName = pathName;
+  public WriteFileCallable(List<DataModel> dataModels) {
     this.dataModels = dataModels;
   }
 
@@ -23,8 +24,20 @@ public class WriteFileCallable implements Callable<String> {
     return pathName;
   }
 
+  public String getFileName() {
+    return fileName;
+  }
+
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+
   public List<DataModel> getDataModels() {
     return dataModels;
+  }
+
+  public void setDataModels(List<DataModel> dataModels) {
+    this.dataModels = dataModels;
   }
 
   @Override
@@ -54,11 +67,13 @@ public class WriteFileCallable implements Callable<String> {
       }
       query.append(";");
       content.add(String.valueOf(query));
-      System.out.println("Query Rollback: " + query);
+      System.out.println(threadName + " - Query Rollback: " + query);
     }
     // CRIACAO DO ARQUIVO DE ROLLBACK
     try {
-      File file = new File(this.pathName);
+      File file = new File(
+          this.getDataModels().get(0).getPath().replace("input", "output")
+              .replace(".sql", "_rollback.sql"));
       FileWriter fw = new FileWriter(file);
       PrintWriter pw = new PrintWriter(fw);
       for (String linha : content) {
