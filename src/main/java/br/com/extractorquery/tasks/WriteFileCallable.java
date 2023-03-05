@@ -56,6 +56,7 @@ public class WriteFileCallable implements Callable<String> {
       content.add(String.valueOf(query));
       System.out.println("Query Rollback: " + query);
     }
+    // CRIACAO DO ARQUIVO DE ROLLBACK
     try {
       File file = new File(this.pathName);
       FileWriter fw = new FileWriter(file);

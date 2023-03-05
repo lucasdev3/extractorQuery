@@ -12,13 +12,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import javax.xml.crypto.Data;
 
 public class ExecutorsTest1 {
 
   public static void main(String[] args) throws InterruptedException {
 
     // create tasks
-    List<Callable<List<String>>> tasksReader = new LinkedList<>();
+    List<Callable<List<DataModel>>> tasksReader = new LinkedList<>();
     List<Callable<String>> tasksWriter = new LinkedList<>();
 
     ReadFileCallable readFileCallable = new ReadFileCallable("/automation/merge/input/script.sql",
@@ -33,20 +34,23 @@ public class ExecutorsTest1 {
         "script5.sql");
     tasksReader.add(readFileCallable);
     tasksReader.add(readFileCallable2);
+    tasksReader.add(readFileCallable3);
+    tasksReader.add(readFileCallable4);
+    tasksReader.add(readFileCallable5);
 
     ExecutorService executorService = Executors.newFixedThreadPool(4);
-    List<Future<List<String>>> results = executorService.invokeAll(tasksReader);
+    List<Future<List<DataModel>>> results = executorService.invokeAll(tasksReader);
 
     // Collect Results
     System.out.println("Result: ");
     try {
-      for (Future<List<String>> future : results) {
+      for (Future<List<DataModel>> future : results) {
         String fileName = new SimpleDateFormat("yyyyMMddHHmmss'.sql'").format(new Date());
-        List<DataModel> dataModels = readFileCallable.extractQueryInsert(future.get());
+        List<DataModel> dataModels = future.get();
         WriteFileCallable writeFile = new WriteFileCallable("/automation/merge/output/" + fileName,
             dataModels);
         tasksWriter.add(writeFile);
-        Thread.sleep(4000); // TIRAR O GARGALO DA THREAD
+        Thread.sleep(1000); // TIRAR O GARGALO DA THREAD
       }
       executorService.invokeAll(tasksWriter);
     } catch (InterruptedException | ExecutionException e) {

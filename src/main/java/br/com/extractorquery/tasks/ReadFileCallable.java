@@ -8,12 +8,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.xml.crypto.Data;
 
-public class ReadFileCallable implements Callable<List<String>> {
+public class ReadFileCallable implements Callable<List<DataModel>> {
 
   private final String pathName;
 
@@ -33,12 +35,15 @@ public class ReadFileCallable implements Callable<List<String>> {
   }
 
   @Override
-  public List<String> call() {
+  public List<DataModel> call() {
     String threadName = Thread.currentThread().getName();
 
     System.out.println("Thread ReadFileCallable: " + threadName);
 
-    List<String> contentFile = new ArrayList<>();
+    List<DataModel> listDataModel = new LinkedList<>();
+    List<String> contentFile = new LinkedList<>();
+
+    // LEITURA DE ARQUIVO
     try {
       File file = new File(this.pathName);
       FileReader fileReader = new FileReader(file);
@@ -51,13 +56,10 @@ public class ReadFileCallable implements Callable<List<String>> {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    return contentFile;
-  }
 
-  public List<DataModel> extractQueryInsert(List<String> list) {
-    List<DataModel> listDataModel = new ArrayList<>();
+    // EXTRAINDO DADOS E PROCESSANDO RETORNO
     int line = 1;
-    for (String linha : list) {
+    for (String linha : contentFile) {
       System.out.println("Analisando linha " + line + " ...");
 //      linha.replace("")
       String pattern = "\\bINSERT\\s+INTO\\s+(\\S+)\\s*\\(([^)]+)\\)\\s*VALUES\\s*\\(([^)]+\\)?)\\)";
@@ -89,6 +91,5 @@ public class ReadFileCallable implements Callable<List<String>> {
     }
     return listDataModel;
   }
-
 
 }
