@@ -32,7 +32,7 @@ public class Main {
 
     List<DataModel> list = readFile.extractQueryInsert(content);
 
-    WriteFile writeFile = new WriteFile(pathNameOutput);
-    writeFile.generateFileRollbackOfInsert(list);
+//    WriteFile writeFile = new WriteFile(pathNameOutput);
+//    writeFile.generateFileRollbackOfInsert(list);
   }
 }
