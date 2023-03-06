@@ -16,12 +16,15 @@ public class FindFilesSystem {
     File search = new File(sourceInputDirectory);
     File[] files = search.listFiles();
     if (files != null) {
+      int count = 1;
       for (File file : files) {
         if (!file.isDirectory()) {
-          map.put("fileName", file.getName());
-          map.put("path", file.getPath());
+          System.out.println(file.getName());
+          map.put("fileName" + count, file.getName());
+          map.put("path" + count, file.getPath());
         }
         list.add(map);
+        count++;
       }
     } else {
       System.out.println("Nenhum arquivo de entrada encontrado!");

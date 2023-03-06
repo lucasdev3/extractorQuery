@@ -27,31 +27,19 @@ public class Initializer {
     List<Callable<String>> tasksWriter = new LinkedList<>();
 
     if (found != null) {
+      int count = 1;
       for (LinkedHashMap<String, String> map : found) {
-        String fileName = map.get("fileName");
-        String path = map.get("path");
+        String fileName = map.get("fileName" + count);
+        String path = map.get("path" + count);
 
         ReadFileCallable readFileCallable = new ReadFileCallable(path, fileName);
         tasksReader.add(readFileCallable);
-
+        count++;
       }
-    }
+    } else {
+      System.out.println("Nenhum arquivo encontrado!");
 
-    ReadFileCallable readFileCallable = new ReadFileCallable("/automation/merge/input/script.sql",
-        "script.sql");
-    ReadFileCallable readFileCallable2 = new ReadFileCallable("/automation/merge/input/script2.sql",
-        "script2.sql");
-    ReadFileCallable readFileCallable3 = new ReadFileCallable("/automation/merge/input/script3.sql",
-        "script3.sql");
-    ReadFileCallable readFileCallable4 = new ReadFileCallable("/automation/merge/input/script4.sql",
-        "script4.sql");
-    ReadFileCallable readFileCallable5 = new ReadFileCallable("/automation/merge/input/script5.sql",
-        "script5.sql");
-    tasksReader.add(readFileCallable);
-    tasksReader.add(readFileCallable2);
-    tasksReader.add(readFileCallable3);
-    tasksReader.add(readFileCallable4);
-    tasksReader.add(readFileCallable5);
+    }
 
     ExecutorService executorService = Executors.newFixedThreadPool(4);
     List<Future<List<DataModel>>> results = executorService.invokeAll(tasksReader);
